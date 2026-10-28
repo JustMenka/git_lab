@@ -1,0 +1,117 @@
+
+=== Исходная история ===
+
+Ветка: feature/task-02
+
+git log --oneline --graph --decorate -7
+
+73d83d6 feature 02: добавить файл
+27876d5 feature 02: изменить сообщение
+4dd8d6c task 02: подготовить базовую ветку
+
+cat message.txt
+
+Сообщение: изменения из feature
+
+Тег исходной истории: evidence/02-before-rebase
+
+=== Изменение базовой ветки ===
+
+git switch base/task-02
+
+Изменён файл message.txt:
+
+Сообщение: изменения из base
+
+Создан коммит:
+eba6ecc base 02: change msg
+
+=== Выполнение rebase ===
+
+git switch feature/task-02
+git rebase base/task-02
+
+Результат:
+Не удалось применить коммит 27876d5 (feature 02: изменить сообщение).
+
+Возник конфликт в файле message.txt.
+
+git status
+
+Rebase в процессе над eba6ecc.
+Последняя команда: pick 27876d5.
+Следующая команда: pick 73d83d6.
+
+Не слитые пути:
+оба изменены: message.txt
+
+=== Содержимое конфликта ===
+
+cat message.txt
+
+<<<<<<< HEAD
+Сообщение: изменения из base
+=======
+Сообщение: изменения из feature
+>>>>>>> 27876d5 (feature 02: изменить сообщение)
+
+=== Разрешение конфликта ===
+
+Файл message.txt изменён вручную.
+
+Итоговое содержимое:
+
+Сообщение: изменения из base и feature
+
+Команды:
+
+git add message.txt
+git rebase --continue
+
+Результат: rebase успешно завершён.
+
+=== История после rebase ===
+
+git log --oneline --graph --decorate -5
+
+92f924d feature 02: добавить файл
+0ab2139 feature 02: изменить сообщение
+eba6ecc base 02: change msg
+4dd8d6c task 02: подготовить базовую ветку
+5306119 История 12: изменение проекта
+
+=== Сравнение историй ===
+
+git range-diff 4dd8d6c..evidence/02-before-rebase eba6ecc..feature/task-02
+
+1: 27876d5 < -: ------- feature 02: изменить сообщение
+-: ------- > 1: 0ab2139 feature 02: изменить сообщение
+2: 73d83d6 = 2: 92f924d feature 02: добавить файл
+
+=== Проверка изменений ===
+
+git diff base/task-02..feature/task-02
+
+Добавлен файл feature.txt:
++Файл feature
+
+Изменён файл message.txt:
+-Сообщение: изменения из base
++Сообщение: изменения из base и feature
+
+git status --short
+
+Вывод пустой. Рабочая директория чистая.
+
+=== Публикация переписанной истории ===
+
+git push --force-with-lease origin feature/task-02
+
+[Добавить фактический вывод команды после выполнения]
+
+=== Итог ===
+
+Rebase успешно выполнен.
+Конфликт в message.txt разрешён вручную.
+Оба feature-коммита перенесены на новую базу.
+Старые и новые последовательности коммитов сравнены через git range-diff.
