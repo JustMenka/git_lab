@@ -1,0 +1,132 @@
+=== 1. Исходный коммит X ===
+
+Команда:
+git show 41a3cdb
+
+Коммит:
+41a3cdb — X: изменить два файла
+
+Изменения в message.txt:
+- Сообщение: исходная версия
++ Временная правка X
+
+Изменения в settings.ini:
+- mode=training
++ mode=temporary
+
+=== 2. Отмена коммита X ===
+
+Команда:
+git revert 41a3cdb
+
+Результат:
+[feature/task-04 d6e6916] Revert "X: изменить два файла"
+2 files changed, 2 insertions(+), 2 deletions(-)
+
+Команда:
+git log --oneline -4
+
+Результат:
+d6e6916 Revert "X: изменить два файла"
+41a3cdb X: изменить два файла
+9265456 task 04: форма и инструкция
+5306119 История 12: изменение проекта
+
+Команда:
+cat settings.ini
+
+Результат:
+mode=training
+
+Команда:
+git status --short
+
+Результат:
+Вывод пустой.
+
+=== 3. Создание коммита Y ===
+
+Команды:
+printf 'mode=production\n' > settings.ini
+printf 'Сообщение: новая версия Y\n' > message.txt
+git add settings.ini message.txt
+git commit -m "Y: изменить настройки и сообщение"
+
+Результат:
+Создан коммит b7937cc.
+
+В коммите Y:
+settings.ini — mode=production
+message.txt — Сообщение: новая версия Y
+
+=== 4. Восстановление одного файла из Y^ ===
+
+Команда:
+git restore --source=HEAD^ -- settings.ini
+
+Результат:
+Файл settings.ini восстановлен из родительского коммита Y.
+Файл message.txt остался в состоянии Y.
+
+Команды:
+git add settings.ini
+git commit -m "restore 04: восстановить settings.ini из Y^"
+
+Результат:
+Создан коммит 8ddf01a.
+
+=== 5. Итоговая история ===
+
+Команда:
+git log --oneline --graph --decorate -5
+
+Результат:
+* 8ddf01a (HEAD -> feature/task-04, origin/feature/task-04) restore 04: восстановить settings.ini из Y^
+* b7937cc Y: изменить настройки и сообщение
+* d6e6916 Revert "X: изменить два файла"
+* 41a3cdb X: изменить два файла
+* 9265456 task 04: форма и инструкция
+
+=== 6. Проверка итоговых файлов ===
+
+Команда:
+cat settings.ini
+
+Результат:
+mode=training
+
+Команда:
+cat message.txt
+
+Результат:
+Сообщение: новая версия Y
+
+Команда:
+git status --short
+
+Результат:
+Вывод пустой.
+
+=== 7. Отправка на GitHub ===
+
+Команда:
+git push origin feature/task-04
+
+Результат:
+41a3cdb..8ddf01a feature/task-04 -> feature/task-04
+
+Команда:
+git status
+
+Результат:
+Текущая ветка: feature/task-04
+Эта ветка соответствует origin/feature/task-04.
+Нечего коммитить, нет изменений в рабочем каталоге.
+
+=== Вывод ===
+
+Команда git revert создала новый коммит, отменяющий изменения X, не удаляя X из истории.
+
+После создания коммита Y команда git restore восстановила только settings.ini из Y^, сохранив изменения message.txt.
+
+Все операции выполнены без переписывания истории. Изменения успешно отправлены на GitHub обычным push.
