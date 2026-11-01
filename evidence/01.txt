@@ -1,0 +1,77 @@
+
+===--soft===
+
+SHA A: d3d98f2
+SHA B: fdb5c39
+Тег: evidence/01-soft-before
+
+Команда:
+git reset --soft d3d98f2
+
+git status --short:
+M  reset-demo.txt
+
+git diff --cached:
+-A
++B
+
+git diff:
+ничего
+
+cat reset-demo.txt:
+B
+
+Результат:
+HEAD переместился на A, изменения остались в индексе и рабочем файле.
+
+=== --mixed ===
+
+SHA A: ec656e3
+SHA B: d7b1842
+Тег: evidence/01-mixed-before
+
+Команда:
+git reset --mixed ec656e3
+
+git status --short:
+ M reset-demo.txt
+
+git diff --cached:
+ничего
+
+git diff:
+-mixed-A
++mixed-B
+
+cat reset-demo.txt:
+mixed-B
+
+Результат:
+HEAD и индекс вернулись к A, рабочий файл остался в состоянии B.
+
+===--hard ===
+
+SHA A: 47da160
+SHA B: 7981d1e
+Тег: evidence/01-hard-before
+
+Команда:
+git reset --hard 47da160
+
+Вывод:
+Указатель HEAD сейчас на коммите 47da160 reset 01 hard: A
+
+git status --short:
+ничего
+
+git diff --cached:
+ничего
+
+git diff:
+ничего
+
+cat reset-demo.txt:
+hard-A
+
+Результат:
+HEAD, индекс и рабочий файл вернулись к состоянию A.
