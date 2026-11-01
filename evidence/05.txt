@@ -1,0 +1,152 @@
+=== 1. Исходное состояние ===
+
+Команды:
+git switch feature/task-05
+git status --short
+git log --oneline --graph --decorate -7
+
+Результат:
+61a720e (feature/task-05, origin/feature/task-05) task 05: форма и инструкция
+
+Рабочая директория чистая.
+
+=== 2. Два клона ===
+
+Клон A:
+~/git-practice
+
+Клон B:
+~/git-task05-B
+
+Команда создания клона B:
+git clone --branch feature/task-05 https://github.com/JustMenka/git_lab.git git-task05-B
+
+Оба клона используют одну удалённую ветку feature/task-05.
+
+=== 3. Локальный коммит L в клоне A ===
+
+Команды:
+cd ~/git-practice
+printf 'Локальное изменение L\n' > local.txt
+git add local.txt
+git commit -m "L: локальное изменение"
+
+Результат:
+f527732 L: локальное изменение
+
+Коммит L оставлен локально, без push.
+
+=== 4. Опубликованный коммит R в клоне B ===
+
+Команды:
+cd ~/git-task05-B
+printf 'Удалённое изменение R\n' > remote.txt
+git add remote.txt
+git commit -m "R: удалённое изменение"
+git push origin feature/task-05
+
+Результат:
+fd1e051 R: удалённое изменение
+
+Коммит R опубликован в origin/feature/task-05.
+
+=== 5. Pull с merge в клоне A ===
+
+Команды:
+cd ~/git-practice
+git pull --no-rebase origin feature/task-05
+
+Результат:
+Создан merge-коммит 2737270.
+Конфликтов не возникло.
+
+=== 6. Проверка истории ===
+
+Команда:
+git log --oneline --graph --decorate -6
+
+Результат:
+*   2737270 Merge branch 'feature/task-05' of https://github.com/JustMenka/git_lab into feature/task-05
+|
+| * fd1e051 R: удалённое изменение
+* | f527732 L: локальное изменение
+|/
+* 61a720e task 05: форма и инструкция
+* 5306119 История 12: изменение проекта
+* f8fc19f История 11: изменение проекта
+
+=== 7. Проверка родителей merge-коммита ===
+
+Команда:
+git show --no-patch --format="%h %p %s" HEAD
+
+Результат:
+2737270 f527732 fd1e051 Merge branch 'feature/task-05' of https://github.com/JustMenka/git_lab into feature/task-05
+
+Первый родитель: f527732
+Второй родитель: fd1e051
+
+=== 8. Проверка изменений ===
+
+Команда:
+git diff 61a720e 2737270 --stat
+
+Результат:
+local.txt  | 1 +
+remote.txt | 1 +
+2 files changed, 2 insertions(+)
+
+Команда:
+cat local.txt
+
+Результат:
+Локальное изменение L
+
+Команда:
+cat remote.txt
+
+Результат:
+Удалённое изменение R
+
+=== 9. Публикация merge-коммита ===
+
+Команда:
+git push origin feature/task-05
+
+Результат:
+Merge-коммит опубликован на GitHub.
+
+Команда:
+git status
+
+Результат:
+Текущая ветка: feature/task-05
+Эта ветка соответствует origin/feature/task-05.
+Нечего коммитить, нет изменений в рабочем каталоге.
+
+=== 10. Итоговая история после публикации ===
+
+Команда:
+git log --oneline --graph --decorate -5
+
+Результат:
+*   2737270 (HEAD -> feature/task-05, origin/feature/task-05) Merge branch 'feature/task-05' of https://github.com/JustMenka/git_lab into feature/task-05
+|
+| * fd1e051 R: удалённое изменение
+* | f527732 L: локальное изменение
+|/
+* 61a720e task 05: форма и инструкция
+* 5306119 История 12: изменение проекта
+
+=== Вывод ===
+
+Созданы два независимых клона одной ветки.
+
+В клоне A создан локальный коммит L.
+В клоне B создан и опубликован коммит R.
+
+Команда git pull --no-rebase объединила обе истории, создав merge-коммит 2737270 с двумя родителями.
+
+Исходные коммиты L и R сохранились без переписывания истории. Итоговое состояние содержит изменения обоих клонов.
+
+После публикации merge-коммита локальная и удалённая ветки синхронизированы. Рабочая директория и индекс чистые.
