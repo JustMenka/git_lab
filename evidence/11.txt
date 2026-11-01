@@ -1,0 +1,75 @@
+1. Проверка исходной ошибки
+
+$ python3 check.py
+AssertionError
+
+2. Определение происхождения ошибочной строки
+
+$ git blame calc.py
+
+^350cbba ... STUDENT_NUMBER = 5
+^350cbba ... def total(n):
+e590f413 ... return 2 + n + STUDENT_NUMBER
+
+3. Поиск первого ошибочного коммита
+
+$ git bisect start
+$ git bisect bad lab-start
+$ git bisect good history-good
+
+Проверка промежуточных коммитов выполнялась командой:
+
+$ python3 check.py
+
+Если проверка выводила OK, использовалась команда:
+
+$ git bisect good
+
+Если проверка завершалась AssertionError, использовалась команда:
+
+$ git bisect bad
+
+Результат поиска:
+
+e590f413e873a97aacf28bc8c6226db4a225051e is the first 'bad' commit
+
+commit e590f413e873a97aacf28bc8c6226db4a225051e
+История 08: изменение проекта
+
+4. Завершение поиска
+
+$ git bisect log > bisect-auto.txt
+$ git bisect reset
+
+Switched to branch 'feature/task-11'
+
+5. Исправление ошибки
+
+В файле calc.py строка:
+
+return 2 + n + STUDENT_NUMBER
+
+заменена на:
+
+return 2 * n + STUDENT_NUMBER
+
+6. Проверка исправления
+
+$ python3 check.py
+OK
+
+7. Создание коммита
+
+$ git add calc.py
+$ git commit -m "fix 11"
+
+[feature/task-11 8d3fb08] fix 11
+1 file changed, 1 insertion(+), 1 deletion(-)
+
+8. Публикация
+
+$ git push origin feature/task-11
+
+8986c3a..8d3fb08 feature/task-11 -> feature/task-11
+
+Результат: ошибка исправлена, проверка проходит успешно.
