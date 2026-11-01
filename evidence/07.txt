@@ -1,0 +1,53 @@
+1. Проверка истории коммитов
+
+$ git log --oneline --decorate -5
+
+b756a19 (HEAD -> feature/task-07, tag: v1.1.0-rc1, origin/feature/task-07) release 07: версия 1.1.0-rc1
+97106bb (tag: v1.0.0) release 07: версия 1.0.0
+622b2a0 task 07: форма и инструкция
+5306119 (tag: lab-start) История 12: изменение проекта
+f8fc19f История 11: изменение проекта
+
+2. Проверка типа annotated tag
+
+$ git cat-file -t v1.0.0
+
+tag
+
+3. Проверка типа lightweight tag
+
+$ git cat-file -t v1.1.0-rc1
+
+commit
+
+4. Публикация annotated tag
+
+$ git push origin v1.0.0
+
+Everything up-to-date
+
+5. Публикация lightweight tag
+
+$ git push origin v1.1.0-rc1
+
+Everything up-to-date
+
+6. Проверка тегов в удалённом репозитории
+
+$ git ls-remote --tags origin "v1.*"
+
+97034ea6a8cf5d673b9eacd65502eb224661a3d0 refs/tags/v1.0.0
+97106bb5582f12e1ee6e8b04d682899d3b7aeb5a refs/tags/v1.0.0^{}
+b756a1983dc4c2cc4095823f89819781cd9d7f80 refs/tags/v1.1.0-rc1
+
+7. Проверка рабочего каталога
+
+$ git status --short
+
+(пустой вывод — рабочий каталог и индекс чистые)
+
+Итог:
+- v1.0.0 — annotated tag, указывает на коммит 97106bb.
+- v1.1.0-rc1 — lightweight tag, указывает на коммит b756a19.
+- Оба тега присутствуют в удалённом репозитории.
+- Для annotated tag Git показывает отдельный объект тега и целевой коммит через ^{}.
